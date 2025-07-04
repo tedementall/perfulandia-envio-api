@@ -49,22 +49,21 @@ public class EnvioController {
     public EnvioDTO obtenerHATEOAS(@PathVariable Integer id) {
         EnvioDTO dto = envioService.obtenerEnvioPorId(id);
 
-        dto.add(Link.of("http://localhost:8888/api/proxy/productos/" + dto.getId()).withSelfRel());
-        dto.add(Link.of("http://localhost:8888/api/proxy/productos/" + dto.getId()).withRel("Modificar HATEOAS").withType("PUT"));
-        dto.add(Link.of("http://localhost:8888/api/proxy/productos/" + dto.getId()).withRel("Eliminar HATEOAS").withType("DELETE"));
+        dto.add(Link.of("http://localhost:8888/api/proxy/envios/" + dto.getId()).withSelfRel());
+        dto.add(Link.of("http://localhost:8888/api/proxy/envios/" + dto.getId()).withRel("Modificar HATEOAS").withType("PUT"));
+        dto.add(Link.of("http://localhost:8888/api/proxy/envios/" + dto.getId()).withRel("Eliminar HATEOAS").withType("DELETE"));
 
         return dto;
     }
 
-    //METODO HATEOAS para listar todos los productos utilizando HATEOAS
     @GetMapping("/hateoas")
     public List<EnvioDTO> obtenerTodosHATEOAS() {
         List<EnvioDTO> lista = envioService.obtenerTodosLosEnvios();
 
         for (EnvioDTO dto : lista) {
     
-            dto.add(Link.of("http://localhost:8888/api/proxy/productos").withRel("Get todos HATEOAS"));
-            dto.add(Link.of("http://localhost:8888/api/proxy/productos/" + dto.getId()).withRel("Crear HATEOAS").withType("POST"));
+            dto.add(Link.of("http://localhost:8888/api/proxy/envios").withRel("Get todos HATEOAS"));
+            dto.add(Link.of("http://localhost:8888/api/proxy/envios/" + dto.getId()).withRel("Crear HATEOAS").withType("POST"));
         }
 
         return lista;
