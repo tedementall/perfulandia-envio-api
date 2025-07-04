@@ -46,14 +46,18 @@ public class EnvioController {
     }
 
     @GetMapping("/hateoas/{id}")
-    public EnvioDTO obtenerHATEOAS(@PathVariable Integer id) {
-        EnvioDTO dto = envioService.obtenerEnvioPorId(id);
+    public ResponseEntity<EnvioDTO> obtenerHATEOAS(@PathVariable Integer id) {
+        Optional<EnvioDTO> envioOptional = envioService.obtenerEnvioPorId(id);
 
-        dto.add(Link.of("http://localhost:8888/api/proxy/envios/" + dto.getId()).withSelfRel());
-        dto.add(Link.of("http://localhost:8888/api/proxy/envios/" + dto.getId()).withRel("Modificar HATEOAS").withType("PUT"));
-        dto.add(Link.of("http://localhost:8888/api/proxy/envios/" + dto.getId()).withRel("Eliminar HATEOAS").withType("DELETE"));
-
-        return dto;
+        if (envioOptional.isPresent()) {
+            EnvioDTO dto = envioOptional.get();
+            dto.add(Link.of("http://localhost:8888/api/proxy/envios/" + dto.getId()).withSelfRel());
+            dto.add(Link.of("http://localhost:8888/api/proxy/envios/" + dto.getId()).withRel("Modificar HATEOAS").withType("PUT"));
+            dto.add(Link.of("http://localhost:8888/api/proxy/envios/" + dto.getId()).withRel("Eliminar HATEOAS").withType("DELETE"));
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/hateoas")
